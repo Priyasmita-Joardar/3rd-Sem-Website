@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IEM Events — Department of CSE (AIML)</title>
+  <meta name="description" content="Events calendar of the Department of CSE (AIML): hackathons, workshops, lectures and cultural evenings.">
+
+  <!-- NEW: Space Grotesk (display) + Inter (body) replace Fraunces + Manrope -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ============ Header ============ -->
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="brand" href="#home">
+        <svg class="brand-logo" viewBox="0 0 48 48" aria-hidden="true">
+          <rect width="48" height="48" rx="10" fill="#0c3b2e"/>
+          <path d="M14 34V14h4v20h-4zm8 0V14h4l8 14V14h4v20h-4l-8-14v14h-4z" fill="#ff5d3b"/>
+        </svg>
+        <span class="brand-text">
+          <strong>IEM Events</strong>
+          <span>Department of CSE (AIML)</span>
+        </span>
+      </a>
+
+      <button id="navToggle" class="nav-toggle" aria-expanded="false" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav id="siteNav" class="site-nav" aria-label="Main navigation">
+        <a href="#home" class="is-current">Home</a>
+        <a href="#events">Events</a>
+        <a href="#register">Register</a>
+        <a href="#gallery">Gallery</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+        <button id="themeToggle" class="theme-toggle" aria-label="Switch to dark mode">
+          <span class="theme-icon" aria-hidden="true">☾</span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- ============ Hero ============ -->
+    <section id="home" class="hero">
+      <div class="wrap hero-grid">
+        <div>
+          <p class="hero-kicker">Department of CSE (AIML) · 2026–27</p>
+          <h1>Build, learn and celebrate — <span class="accent">all in one place</span>.</h1>
+          <p class="hero-lead">
+            The official events hub of the Department of Computer Science &amp; Engineering
+            (Artificial Intelligence &amp; Machine Learning). Hackathons, hands-on workshops,
+            guest lectures and cultural evenings — register in under a minute.
+          </p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#register">Register for an event</a>
+            <a class="btn btn-ghost" href="#events">Browse the calendar</a>
+          </div>
+        </div>
+
+        <div class="countdown-card" aria-live="polite">
+          <p class="countdown-label">Next up</p>
+          <h2 class="countdown-title" id="cdTitle">Loading…</h2>
+          <p class="countdown-meta" id="cdMeta"></p>
+          <div class="countdown">
+            <div><span id="cdDays">00</span><small>days</small></div>
+            <div><span id="cdHours">00</span><small>hours</small></div>
+            <div><span id="cdMins">00</span><small>mins</small></div>
+            <div><span id="cdSecs">00</span><small>secs</small></div>
+          </div>
+          <!-- NEW: progress bar between the previous and next event -->
+          <div class="countdown-progress" aria-hidden="true"><i id="cdBar"></i></div>
+          <p class="clock">
+            <span id="date"></span> · <time id="clock">--:--:--</time> IST
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ Events ============ -->
+    <section id="events" class="section">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="section-eyebrow">Calendar</span>
+          <h2>Upcoming events</h2>
+          <p>Everything the department has planned this semester. Filter by type to find what fits you.</p>
+        </div>
+
+        <div id="eventFilters" class="filters" role="group" aria-label="Filter events by category">
+          <button class="chip is-active" data-filter="all">All</button>
+          <button class="chip" data-filter="technical">Technical</button>
+          <button class="chip" data-filter="workshop">Workshops</button>
+          <button class="chip" data-filter="cultural">Cultural</button>
+          <button class="chip" data-filter="lecture">Lectures</button>
+        </div>
+
+        <ul id="eventList" class="event-list"><!-- rendered by script.js --></ul>
+        <p id="eventEmpty" class="empty-note" hidden>No events in this category right now — check back soon.</p>
+      </div>
+    </section>
+
+    <!-- ============ Registration ============ -->
+    <section id="register" class="section section-tinted">
+      <div class="wrap form-grid">
+        <div>
+          <div class="section-head">
+            <span class="section-eyebrow">Sign up</span>
+            <h2>Event registration</h2>
+          </div>
+          <ul class="form-notes">
+            <li>Registration is free for all department students.</li>
+            <li>Carry your college ID card to the venue.</li>
+            <li>Teams of 2–4 for HackIEM — register individually, we form the teams.</li>
+            <li>A confirmation email is sent within 24 hours.</li>
+          </ul>
+        </div>
+
+        <form id="regForm" class="form" novalidate>
+          <div class="field-row">
+            <div class="field">
+              <label for="studentName">Full name</label>
+              <input type="text" id="studentName" name="studentName" autocomplete="name">
+              <span class="error" id="err-studentName"></span>
+            </div>
+            <div class="field">
+              <label for="rollNo">Roll number</label>
+              <input type="text" id="rollNo" name="rollNo" inputmode="numeric" autocomplete="off">
+              <span class="error" id="err-rollNo"></span>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="department">Department</label>
+            <select id="department" name="department">
+              <option value="">— Choose —</option>
+              <option>CSE (AIML)</option>
+              <option>CSE</option>
+              <option>IT</option>
+              <option>ECE</option>
+              <option>EE</option>
+              <option>ME</option>
+              <option>CE</option>
+              <option>Other</option>
+            </select>
+            <span class="error" id="err-department"></span>
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" autocomplete="email">
+              <span class="error" id="err-email"></span>
+            </div>
+            <div class="field">
+              <label for="phone">Mobile number</label>
+              <input type="tel" id="phone" name="phone" inputmode="numeric" autocomplete="tel">
+              <span class="error" id="err-phone"></span>
+            </div>
+          </div>
+
+          <fieldset class="field">
+            <legend>Gender</legend>
+            <div class="radio-row">
+              <label><input type="radio" name="gender" value="female"> Female</label>
+              <label><input type="radio" name="gender" value="male"> Male</label>
+              <label><input type="radio" name="gender" value="other"> Other</label>
+            </div>
+            <span class="error" id="err-gender"></span>
+          </fieldset>
+
+          <div class="field">
+            <label for="eventSelect">Event</label>
+            <select id="eventSelect" name="eventSelect">
+              <option value="">— Choose an event —</option>
+              <!-- options injected by script.js -->
+            </select>
+            <span class="error" id="err-eventSelect"></span>
+          </div>
+
+          <button type="submit" class="btn btn-primary">Submit registration</button>
+          <p id="regStatus" class="form-status" role="status"></p>
+        </form>
+      </div>
+    </section>
+
+    <!-- ============ Gallery ============ -->
+    <section id="gallery" class="section">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="section-eyebrow">Moments</span>
+          <h2>From past editions</h2>
+          <p>Scenes from HackIEM, Innovacion, workshops and the cultural evening.</p>
+        </div>
+
+        <div class="gallery">
+          <figure class="gallery-item">
+            <img src="assets/gallery-2.jpg" alt="Students collaborating on hardware at a hackathon" loading="lazy">
+            <figcaption>HackIEM — overnight build session</figcaption>
+          </figure>
+          <figure class="gallery-item">
+            <img src="assets/gallery-3.jpg" alt="Students working in a computer lab during a workshop" loading="lazy">
+            <figcaption>PyTorch workshop — lab in full swing</figcaption>
+          </figure>
+          <figure class="gallery-item">
+            <img src="assets/hackathon.jpg" alt="Two students pair-programming at a hackathon" loading="lazy">
+            <figcaption>HackIEM 2025 — pair programming</figcaption>
+          </figure>
+          <figure class="gallery-item">
+            <img src="assets/gallery-1.jpg" alt="Teams coding around a large table" loading="lazy">
+            <figcaption>Code sprint — teams at work</figcaption>
+          </figure>
+          <figure class="gallery-item">
+            <img src="assets/gallery-4.jpg" alt="Gaming arena at a tech fest" loading="lazy">
+            <figcaption>Innovacion — gaming arena</figcaption>
+          </figure>
+          <figure class="gallery-item">
+            <img src="assets/cultural.jpg" alt="Classical dance performance on stage" loading="lazy">
+            <figcaption>Sharod Sandhya — classical dance</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ About ============ -->
+    <section id="about" class="section section-tinted">
+      <div class="wrap about-grid">
+        <div>
+          <div class="section-head">
+            <span class="section-eyebrow">People</span>
+            <h2>About the committee</h2>
+          </div>
+          <p>
+            The departmental events committee plans and runs every technical and cultural
+            activity of CSE (AIML) — from 24-hour hackathons to the pre-Puja evening.
+            The committee is led by faculty coordinators and a student core team of twelve.
+          </p>
+          <!-- NEW: framed photo in the About section -->
+          <img class="about-photo" src="assets/fest.jpg" alt="Students gathered at the annual tech fest" loading="lazy">
+        </div>
+
+        <aside class="coordinators" aria-label="Faculty coordinators">
+          <h3>Faculty coordinators</h3>
+          <dl class="coord-list">
+            <div>
+              <dt>Convener</dt>
+              <dd>Dr. Ananya Chatterjee <span>· Professor, CSE (AIML)</span></dd>
+            </div>
+            <div>
+              <dt>Co-convener</dt>
+              <dd>Prof. Rahit Banerjee <span>· Associate Professor, CSE (AIML)</span></dd>
+            </div>
+            <div>
+              <dt>Student secretary</dt>
+              <dd>Ishita Sen <span>· 3rd year, CSE (AIML)</span></dd>
+            </div>
+            <div>
+              <dt>Treasurer</dt>
+              <dd>Arjun Mehta <span>· 3rd year, CSE (AIML)</span></dd>
+            </div>
+          </dl>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ============ Contact ============ -->
+    <section id="contact" class="section">
+      <div class="wrap contact-grid">
+        <div>
+          <div class="section-head">
+            <span class="section-eyebrow">Reach us</span>
+            <h2>Contact &amp; feedback</h2>
+          </div>
+          <address class="contact-details">
+            <p>
+              Department of CSE (AIML), Institute of Engineering &amp; Management,<br>
+              Gurukul Campus, Kolkata 700107, West Bengal
+            </p>
+            <p>
+              Email: <a href="mailto:events.cseaiml@iem.edu.in">events.cseaiml@iem.edu.in</a><br>
+              Phone: <a href="tel:+913340012345">+91 33 4001 2345</a>
+            </p>
+            <p>Office hours: Monday–Friday, 10:00–17:00 IST</p>
+          </address>
+        </div>
+
+        <form id="feedbackForm" class="form" novalidate>
+          <div class="field">
+            <label for="fbName">Name</label>
+            <input type="text" id="fbName" name="fbName" autocomplete="name">
+            <span class="error" id="err-fbName"></span>
+          </div>
+          <div class="field">
+            <label for="fbEmail">Email</label>
+            <input type="email" id="fbEmail" name="fbEmail" autocomplete="email">
+            <span class="error" id="err-fbEmail"></span>
+          </div>
+          <div class="field">
+            <label for="fbMessage">Message</label>
+            <textarea id="fbMessage" name="fbMessage" rows="5"></textarea>
+            <span class="error" id="err-fbMessage"></span>
+          </div>
+          <button type="submit" class="btn btn-primary">Send feedback</button>
+          <p id="fbStatus" class="form-status" role="status"></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ Footer ============ -->
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <p>© 2026 Department of CSE (AIML), IEM. All events are open to bonafide students.</p>
+      <a class="back-top" href="#home">Back to top ↑</a>
+    </div>
+  </footer>
+
+  <!-- NEW: toast + floating back-to-top button -->
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <button id="toTop" class="to-top" aria-label="Back to top">↑</button>
+
+  <script src="script.js"></script>
+</body>
+</html>
